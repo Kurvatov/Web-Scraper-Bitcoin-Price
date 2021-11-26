@@ -14,9 +14,9 @@ ENV = os.getenv("ENV", default="dev")
 API_KEY = os.getenv("API_KEY")
 
 def getLastDate():
-    req = requests.get('http://localhost:8000/stats?limit=1&date_order=desc', headers={'access_token': API_KEY})
+    req = requests.get('https://btc-stats.herokuapp.com/stats?limit=1&date_order=desc', headers={'access_token': API_KEY})
     response = json.loads(req.text)
-    
+
     if response['items'] == []:
         return ""
     
@@ -35,7 +35,7 @@ def buildUrls():
         return None
     #Init dates variable
     startDate = convertToTimestamp(str(_startDate))
-    currentDate = convertToTimestamp(str(datetime.today()-timedelta(1)))
+    currentDate = convertToTimestamp(str(datetime.today()))
 
     endDate = startDate + convertDaysToTimestamp(99) #To get the date I increment the start date by 99 days
     #Create list of URL's for async calls
@@ -118,12 +118,6 @@ def bulkPost():
         return None
     return requests.post('https://btc-stats.herokuapp.com/stats', headers={'access_token': API_KEY},data=jsonObject)
 
-# jsonObject = asyncio.run(getAllData())
-# # print(jsonObject)
-# # with open('data.txt', 'w') as outfile:
-# #     json.dump(jsonObject, outfile)
-# #r = requests.post('http://localhost:8000/stats', headers={'access_token': 'b8a310ff-8165-4f2f-8837-cf83f461561a'},data=jsonObject)
-# import pdb 
-# pdb.set_trace()
+
 
 
